@@ -1,25 +1,12 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
-import platform
-
-# 나눔고딕 폰트 설정
-if platform.system() == 'Windows':
-    plt.rc('font', family='Malgun Gothic')  # Windows용
-elif platform.system() == 'Darwin':  # MacOS의 경우
-    plt.rc('font', family='AppleGothic')  # 또는 'NanumGothic' 수동 설치 가능
-else:  # Linux (Ubuntu)
-    plt.rc('font', family='NanumGothic')
-
-# 마이너스 기호가 깨지지 않게 설정
-plt.rcParams['axes.unicode_minus'] = False
 
 # 제목 설정
-st.title('주문 금액별 주문 수 분석')
+st.title('Order Amount Distribution')
 
 # 파일 업로더 생성
-uploaded_file = st.file_uploader("CSV 파일을 업로드하세요", type="csv")
+uploaded_file = st.file_uploader("Upload CSV file", type="csv")
 
 if uploaded_file is not None:
     # 데이터 읽기
@@ -51,13 +38,17 @@ if uploaded_file is not None:
     for bar in bars:
         yval = bar.get_height()  # 막대의 높이 값(주문 수)
         plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')  # 막대 위에 수치를 표시
-    
-    plt.xlabel('금액 범주 (원)')
-    plt.ylabel('주문 수')
-    plt.title('0 ~ 200,000원 단위별 주문 수')
-    plt.xticks(rotation=45)
+
+    # 가로축 레이블을 커스터마이즈하여 <1.0, >1.0, >2.0 형태로 표시
+    plt.xlabel('Order Amount Range')
+    plt.ylabel('Order Count')
+    plt.title('Order Distribution by Amount')
+
+    # 가로축 라벨 설정
+    xticks_labels = ['<1.0', '>1.0', '>2.0', '>3.0', '>4.0', '>5.0', '>6.0', '>7.0', '>8.0', '>9.0', '>10.0', '>20.0']
+    plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
     
     # Streamlit에 그래프 표시
     st.pyplot(plt)
 else:
-    st.write("CSV 파일을 업로드하여 분석을 시작하세요.")
+    st.write("Upload a CSV file to start the analysis.")
