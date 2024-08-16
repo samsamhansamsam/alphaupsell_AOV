@@ -51,7 +51,7 @@ if uploaded_file is not None:
         plt.title('Order Distribution by Amount')
 
         # 가로축 라벨 설정 - 눈금 개수에 맞게 라벨을 설정
-        xticks_labels = ['<1.0', '>1.0', '>2.0', '>3.0', '>4.0', '>5.0', '>6.0', '>7.0', '>8.0', '>9.0', '>10.0', '>11.0', '>12.0', '>13.0', '>14.0', '>15.0', '>16.0', '>17.0', '>18.0', '>19.0', '>20.0']
+        xticks_labels = ['<1.0', '>1.0', '>2.0', '>3.0', '>4.0', '>5.0', '>6.0', '>7.0', '>8.0', '>9.0', '>10.0', '>20.0']
         
         # order_counts.index에 있는 값의 수만큼 xticks_labels를 잘라서 사용
         plt.xticks(ticks=order_counts.index, labels=xticks_labels[:len(order_counts.index)], rotation=45)
