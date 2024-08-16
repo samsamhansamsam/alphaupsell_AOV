@@ -45,7 +45,7 @@ if uploaded_file is not None:
     plt.title('Order Distribution by Amount')
 
     # 가로축 라벨 설정
-    xticks_labels = ['<1.0', '>1.0', '>2.0', '>3.0', '>4.0', '>5.0', '>6.0', '>7.0', '>8.0', '>9.0', '>10.0', '>20.0']
+    xticks_labels = ['<1.0', '>1.0', '>2.0', '>3.0', '>4.0', '>5.0', '>6.0', '>7.0', '>8.0', '>9.0', '>10.0', '>11.0', '>12.0', '>13.0', '>14.0', '>15.0', '>16.0', '>17.0', '>18.0', '>19.0', '>20.0']
     plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
     
     # Streamlit에 그래프 표시
