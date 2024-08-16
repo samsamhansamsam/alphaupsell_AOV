@@ -35,7 +35,7 @@ if uploaded_file is not None:
     
     # 막대그래프 그리기
     if len(order_counts) > 0:  # 값이 있는 경우에만 그래프 그리기
-        bars = plt.bar(order_counts.index.astype(str), order_counts.values, color='skyblue')
+        bars = plt.bar(order_counts.index, order_counts.values, color='skyblue', width=8000)  # 폭 조정
 
         # 세로선 제거
         plt.grid(False)
@@ -54,7 +54,7 @@ if uploaded_file is not None:
         plt.ylabel('Order Count')
         plt.title('Order Distribution by Amount')
 
-        # xticks 설정
+        # xticks 설정 - 눈금과 레이블을 일치시킴
         plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
     else:
         st.write("No data available to display.")  # 데이터가 없을 경우 경고 메시지 출력
