@@ -1,6 +1,19 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import platform
+
+# 나눔고딕 폰트 설정
+if platform.system() == 'Windows':
+    plt.rc('font', family='NanumGothic')  # Windows용
+elif platform.system() == 'Darwin':  # MacOS의 경우
+    plt.rc('font', family='AppleGothic')  # 또는 'NanumGothic' 수동 설치 가능
+else:  # Linux (Ubuntu)
+    plt.rc('font', family='NanumGothic')
+
+# 마이너스 기호가 깨지지 않게 설정
+plt.rcParams['axes.unicode_minus'] = False
 
 # 제목 설정
 st.title('주문 금액별 주문 수 분석')
