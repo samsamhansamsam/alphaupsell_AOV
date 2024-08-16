@@ -47,7 +47,7 @@ if uploaded_file is not None:
 
         # 가로축 레이블을 동적으로 생성하여 21개로 맞춤 (<1.0, >1.0, >2.0 형태로)
         num_ticks = len(order_counts.index)  # 실제 눈금 수를 기반으로 라벨 생성
-        xticks_labels = [f">{i / 10.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]  # 21개 자동 생성
+        xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]  # 21개 자동 생성
 
         # 가로축 눈금과 라벨 설정
         plt.xlabel('Order Amount Range')
