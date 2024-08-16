@@ -12,6 +12,9 @@ if uploaded_file is not None:
     # 데이터 읽기
     data = pd.read_csv(uploaded_file)
 
+    # '주문번호' 열을 기준으로 중복 제거
+    data = data.drop_duplicates(subset=['주문번호'])
+
     # '총 주문 금액' 데이터 타입 변환
     data['총 주문 금액'] = pd.to_numeric(data['총 주문 금액'], errors='coerce')
 
@@ -29,7 +32,7 @@ if uploaded_file is not None:
     bars = plt.bar(order_counts.index.astype(str), order_counts.values, color='skyblue')
     
     # 세로선 제거
-    plt.grid(False)  # 기본적으로 모든 그리드를 없앱니다.
+    plt.grid(False)
     
     # 각 막대 위에 수치 표시
     for bar in bars:
