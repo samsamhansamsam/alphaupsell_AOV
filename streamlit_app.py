@@ -45,16 +45,17 @@ if uploaded_file is not None:
             yval = bar.get_height()  # 막대의 높이 값(주문 수)
             plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')  # 막대 위에 수치를 표시
 
-        # 가로축 레이블을 커스터마이즈하여 <1.0, >1.0, >2.0 형태로 표시
+        # 가로축 레이블을 동적으로 생성하여 21개로 맞춤 (<1.0, >1.0, >2.0 형태로)
+        num_ticks = len(order_counts.index)  # 실제 눈금 수를 기반으로 라벨 생성
+        xticks_labels = [f">{i / 10.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]  # 21개 자동 생성
+
+        # 가로축 눈금과 라벨 설정
         plt.xlabel('Order Amount Range')
         plt.ylabel('Order Count')
         plt.title('Order Distribution by Amount')
 
-        # 가로축 라벨 설정 - 눈금 개수에 맞게 라벨을 설정
-        xticks_labels = ['<1.0', '>1.0', '>2.0', '>3.0', '>4.0', '>5.0', '>6.0', '>7.0', '>8.0', '>9.0', '>10.0', '>20.0']
-        
-        # order_counts.index에 있는 값의 수만큼 xticks_labels를 잘라서 사용
-        plt.xticks(ticks=order_counts.index, labels=xticks_labels[:len(order_counts.index)], rotation=45)
+        # xticks 설정
+        plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
     else:
         st.write("No data available to display.")  # 데이터가 없을 경우 경고 메시지 출력
     
