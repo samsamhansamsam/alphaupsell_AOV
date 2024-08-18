@@ -3,10 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 제목 설정
-st.title('Order Amount Distribution')
+st.title('알파업셀 객단가 분석 도구 v1.0')
 
 # 파일 업로더 생성
-uploaded_file = st.file_uploader("Upload CSV file", type="csv")
+uploaded_file = st.file_uploader("CSV 파일을 달라.", type="csv")
 
 if uploaded_file is not None:
     # 데이터 읽기
@@ -49,7 +49,7 @@ if uploaded_file is not None:
     plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Order Count')
-    plt.title('Order Distribution by Amount (전체 주문 기준)')
+    plt.title('Order Distribution by Amount (All Order)')
     
     # Streamlit에 전체 주문 기준 그래프 표시
     st.pyplot(plt)
@@ -92,10 +92,10 @@ if uploaded_file is not None:
         plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
         plt.xlabel('Order Amount Range')
         plt.ylabel('Order Count')
-        plt.title('Order Distribution by Amount (업셀 주문 기준)')
+        plt.title('Order Distribution by Amount (Upsell Order)')
 
         # Streamlit에 업셀 주문 기준 그래프 표시
         st.pyplot(plt)
 
 else:
-    st.write("Upload a CSV file to start the analysis.")
+    st.write("주문목록 내 '내보내기'버튼을 통해 내려받은 CSV 파일만 사용 가능합니다.")
