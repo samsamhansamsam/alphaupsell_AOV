@@ -28,6 +28,10 @@ if uploaded_file is not None:
     # 20만원 이상의 주문들을 200,000원 카테고리에 합치기
     data['금액 범주'] = data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
 
+    # 모든 범주를 설정 (빈 범주도 포함)
+    full_range = pd.Series([i * 10000 for i in range(21)] + [200000])  # 0, 10000, ..., 200000
+    order_counts = data['금액 범주'].value_counts().reindex(full_range, fill_value=0).sort_index()
+
     # 범주별 주문 수 계산 (전체 주문 기준)
     order_counts = data['금액 범주'].value_counts().sort_index()
 
@@ -45,7 +49,7 @@ if uploaded_file is not None:
 
     # 가로축 라벨 설정
     num_ticks = len(order_counts.index)
-    xticks_labels = [f">{i / 10.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]
+    xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]
     plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Order Count')
@@ -70,8 +74,9 @@ if uploaded_file is not None:
         # 20만원 이상의 주문들을 200,000원 카테고리에 합치기
         upsell_data['금액 범주'] = upsell_data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
 
-        # 범주별 주문 수 계산 (업셀 주문 기준)
-        upsell_order_counts = upsell_data['금액 범주'].value_counts().sort_index()
+        # 모든 범주를 설정 (빈 범주도 포함)
+        full_range = pd.Series([i * 10000 for i in range(21)] + [200000])  # 0, 10000, ..., 200000
+        upsell_order_counts = upsell_data['금액 범주'].value_counts().reindex(full_range, fill_value=0).sort_index()
 
         # 데이터 유효성 검사 (업셀 주문 기준)
         st.write("Order Counts (업셀 주문):", upsell_order_counts)
@@ -87,7 +92,7 @@ if uploaded_file is not None:
 
         # 가로축 라벨 설정 (업셀 주문 기준)
         num_ticks = len(upsell_order_counts.index)
-        xticks_labels = [f">{i / 10.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]
+        xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]
         plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
         plt.xlabel('Order Amount Range')
         plt.ylabel('Order Count')
