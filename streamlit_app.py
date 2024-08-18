@@ -31,6 +31,9 @@ if uploaded_file is not None:
     # 범주별 주문 수 계산 (전체 주문 기준)
     order_counts = data['금액 범주'].value_counts().sort_index()
 
+    # 데이터 유효성 검사 (전체 주문 기준)
+    st.write("Order Counts (전체 주문):", order_counts)
+
     # 시각화 (전체 주문 기준)
     plt.figure(figsize=(10, 6))
     bars = plt.bar(order_counts.index, order_counts.values, color='skyblue', width=8000)
@@ -57,37 +60,41 @@ if uploaded_file is not None:
     # 업셀 주문 필터링
     upsell_data = data[data['일반/업셀 구분'] == '업셀']
 
-    # 데이터 검증: 업셀 주문만 필터링된 데이터 출력
-    st.write("업셀 주문 데이터 검증:", upsell_data)
+    # 데이터 유효성 검사: 업셀 주문 데이터가 없는 경우 경고 표시
+    if upsell_data.empty:
+        st.write("경고: 업셀 주문 데이터가 없습니다.")
+    else:
+        # 10,000원 단위로 범주화 (업셀 주문 기준)
+        upsell_data['금액 범주'] = (upsell_data['총 주문 금액'] // 10000) * 10000
 
-    # 10,000원 단위로 범주화 (업셀 주문 기준)
-    upsell_data['금액 범주'] = (upsell_data['총 주문 금액'] // 10000) * 10000
+        # 20만원 이상의 주문들을 200,000원 카테고리에 합치기
+        upsell_data['금액 범주'] = upsell_data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
 
-    # 20만원 이상의 주문들을 200,000원 카테고리에 합치기
-    upsell_data['금액 범주'] = upsell_data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
+        # 범주별 주문 수 계산 (업셀 주문 기준)
+        upsell_order_counts = upsell_data['금액 범주'].value_counts().sort_index()
 
-    # 범주별 주문 수 계산 (업셀 주문 기준)
-    upsell_order_counts = upsell_data['금액 범주'].value_counts().sort_index()
+        # 데이터 유효성 검사 (업셀 주문 기준)
+        st.write("Order Counts (업셀 주문):", upsell_order_counts)
 
-    # 시각화 (업셀 주문 기준)
-    plt.figure(figsize=(10, 6))
-    bars = plt.bar(upsell_order_counts.index, upsell_order_counts.values, color='orange', width=8000)
+        # 시각화 (업셀 주문 기준)
+        plt.figure(figsize=(10, 6))
+        bars = plt.bar(upsell_order_counts.index, upsell_order_counts.values, color='orange', width=8000)
 
-    # 각 막대 위에 수치 표시
-    for bar in bars:
-        yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
+        # 각 막대 위에 수치 표시
+        for bar in bars:
+            yval = bar.get_height()
+            plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
 
-    # 가로축 라벨 설정 (업셀 주문 기준)
-    num_ticks = len(upsell_order_counts.index)
-    xticks_labels = [f">{i / 10.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]
-    plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
-    plt.xlabel('Order Amount Range')
-    plt.ylabel('Order Count')
-    plt.title('Order Distribution by Amount (업셀 주문 기준)')
+        # 가로축 라벨 설정 (업셀 주문 기준)
+        num_ticks = len(upsell_order_counts.index)
+        xticks_labels = [f">{i / 10.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]
+        plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
+        plt.xlabel('Order Amount Range')
+        plt.ylabel('Order Count')
+        plt.title('Order Distribution by Amount (업셀 주문 기준)')
 
-    # Streamlit에 업셀 주문 기준 그래프 표시
-    st.pyplot(plt)
+        # Streamlit에 업셀 주문 기준 그래프 표시
+        st.pyplot(plt)
 
 else:
     st.write("Upload a CSV file to start the analysis.")
