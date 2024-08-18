@@ -68,10 +68,6 @@ if uploaded_file is not None:
     if upsell_data.empty:
         st.write("경고: 업셀 주문 데이터가 없습니다.")
     else:
-        # 모든 범주를 설정 (빈 범주도 포함)
-        full_range = pd.Series([i * 10000 for i in range(21)] + [200000])  # 0, 10000, ..., 200000
-        upsell_order_counts = upsell_data['금액 범주'].value_counts().reindex(full_range, fill_value=0).sort_index()
-
         # 데이터 유효성 검사 (업셀 주문 기준)
         st.write("Order Counts (업셀 주문):", upsell_order_counts)
 
