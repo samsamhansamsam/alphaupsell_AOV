@@ -25,6 +25,9 @@ if uploaded_file is not None:
     # 10,000원 단위로 범주화 (전체 주문 기준)
     data['금액 범주'] = (data['총 주문 금액'] // 10000) * 10000
 
+    # 20만원 이상의 값은 200,000으로 변환
+    data['금액 범주'] = data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
+
     # 범주별 주문 수 계산 (전체 주문 기준)
     order_counts = data['금액 범주'].value_counts().sort_index()
 
@@ -63,6 +66,9 @@ if uploaded_file is not None:
     else:
         # 10,000원 단위로 범주화 (업셀 주문 기준)
         upsell_data['금액 범주'] = (upsell_data['총 주문 금액'] // 10000) * 10000
+
+        # 20만원 이상의 값은 200,000으로 변환
+        upsell_data['금액 범주'] = upsell_data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
 
         # 모든 범주를 설정 (빈 범주도 포함)
         full_range = pd.Series([i * 10000 for i in range(21)] + [200000])  # 0, 10000, ..., 200000
