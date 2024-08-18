@@ -14,6 +14,7 @@ if uploaded_file is not None:
 
     # '총 주문 금액' 데이터 타입 변환
     data['총 주문 금액'] = pd.to_numeric(data['총 주문 금액'], errors='coerce')
+    data = data[data['총 주문 금액'] > 0]  # 0원인 데이터를 제거
 
     # 중복 제거: 중복된 '주문번호'가 있을 때 '업셀'을 우선적으로 보존
     data = data.sort_values(by=['일반/업셀 구분'], ascending=False)  # '일반'을 먼저 정렬하여 '업셀'을 남김
