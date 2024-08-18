@@ -3,20 +3,22 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 제목 설정
-st.title('Order Amount Distribution')
+st.title('알파업셀 객단가 분석기')
 
 # 파일 업로더 생성
-uploaded_file = st.file_uploader("Upload CSV file", type="csv")
+uploaded_file = st.file_uploader("CSV 파일을 업로드 해주세요.", type="csv")
 
 if uploaded_file is not None:
     # 데이터 읽기
     data = pd.read_csv(uploaded_file)
 
-    # '주문번호' 열을 기준으로 중복 제거
-    data = data.drop_duplicates(subset=['주문번호'])
-
     # '총 주문 금액' 데이터 타입 변환
     data['총 주문 금액'] = pd.to_numeric(data['총 주문 금액'], errors='coerce')
+
+    # 중복 제거: 중복된 '주문번호'가 있을 때 '업셀'을 우선적으로 보존
+    # '일반'과 '업셀' 구분 기준으로 '업셀'이 있는 경우 업셀을 남김
+    data = data.sort_values(by=['일반/업셀 구분'], ascending=True)  # '업셀'을 남기기 위해 '일반'부터 정렬
+    data = data.drop_duplicates(subset=['주문번호'], keep='last')  # '업셀'이 우선 보존됨
 
     # 10,000원 단위로 범주화
     data['금액 범주'] = (data['총 주문 금액'] // 10000) * 10000
@@ -50,7 +52,7 @@ if uploaded_file is not None:
         xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]  # 21개 자동 생성
 
         # 가로축 눈금과 라벨 설정
-        plt.xlabel('Order Amount Range')
+        plt.xlabel('Order Amount Range[All Order]')
         plt.ylabel('Order Count')
         plt.title('Order Distribution by Amount')
 
@@ -62,4 +64,4 @@ if uploaded_file is not None:
     # Streamlit에 그래프 표시
     st.pyplot(plt)
 else:
-    st.write("Upload a CSV file to start the analysis.")
+    st.write("주문목록 내 '내보내기'버튼을 통해 내려받을 CSV 파일만 사용 가능합니다.")
