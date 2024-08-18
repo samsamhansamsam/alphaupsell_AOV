@@ -58,7 +58,7 @@ if uploaded_file is not None:
     st.write("### 업셀 주문 기준 객단가 분포")
 
     # 업셀 주문 필터링
-    upsell_data = data[data['일반/업셀 구분'] == '업셀']
+    upsell_data = data[data['일반/업셀 구분'] == '업셀 상품']
 
     # 데이터 유효성 검사: 업셀 주문 데이터가 없는 경우 경고 표시
     if upsell_data.empty:
