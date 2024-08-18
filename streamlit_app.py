@@ -70,8 +70,8 @@ if uploaded_file is not None:
         # 20만원 이상의 값은 200,000으로 변환
         upsell_data['금액 범주'] = upsell_data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
 
-        # 모든 범주를 설정 (빈 범주도 포함)
-        full_range = pd.Series([i * 10000 for i in range(21)] + [200000])  # 0, 10000, ..., 200000
+        # 모든 범주를 설정 (빈 범주도 포함) - 200,000은 한 번만 포함
+        full_range = pd.Series([i * 10000 for i in range(21)])  # 0, 10000, ..., 200000
         upsell_order_counts = upsell_data['금액 범주'].value_counts().reindex(full_range, fill_value=0).sort_index()
 
         # 데이터 유효성 검사 (업셀 주문 기준)
