@@ -16,7 +16,7 @@ if uploaded_file is not None:
     data['총 주문 금액'] = pd.to_numeric(data['총 주문 금액'], errors='coerce')
 
     # 중복 제거: 중복된 '주문번호'가 있을 때 '업셀'을 우선적으로 보존
-    data = data.sort_values(by=['일반/업셀 구분'], ascending=True)  # '일반'을 먼저 정렬하여 '업셀'을 남김
+    data = data.sort_values(by=['일반/업셀 구분'], ascending=False)  # '일반'을 먼저 정렬하여 '업셀'을 남김
     data = data.drop_duplicates(subset=['주문번호'], keep='last')  # '업셀' 우선 보존
 
     ### 1. 전체 주문 기준 시각화 ###
