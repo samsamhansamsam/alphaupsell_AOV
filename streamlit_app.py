@@ -29,6 +29,11 @@ if uploaded_file is not None:
     # 20만원 이상의 값은 200,000으로 변환
     data['금액 범주'] = data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
 
+    # 모든 범주를 설정 (빈 범주도 포함) - 0원부터 200,000원까지 범위
+    full_range = pd.Series([i * 10000 for i in range(21)])  # 0, 10000, ..., 200000
+    order_counts = data['금액 범주'].value_counts().reindex(full_range, fill_value=0).sort_index()
+
+
     # 범주별 주문 수 계산 (전체 주문 기준)
     order_counts = data['금액 범주'].value_counts().sort_index()
 
