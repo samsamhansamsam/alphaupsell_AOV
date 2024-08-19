@@ -12,7 +12,7 @@ if uploaded_file is not None:
     # 데이터 읽기
     data = pd.read_csv(uploaded_file)
 
-    # '총 주문 금액' 데이터 타입 변환
+    # '총 주문 금액' 데이터 타입 변환 및 0원 데이터 제거 (취소 및 환불된 주문)
     data['총 주문 금액'] = pd.to_numeric(data['총 주문 금액'], errors='coerce')
     data = data[data['총 주문 금액'] > 0]  # 0원인 데이터를 제거
 
@@ -55,7 +55,34 @@ if uploaded_file is not None:
     # Streamlit에 전체 주문 기준 그래프 표시
     st.pyplot(plt)
 
-    ### 2. 업셀 주문 기준 시각화 ###
+
+    ### 2. 전체 주문 기준 객단가 분포 비율 ###
+    st.write("### 전체 주문 기준 객단가 분포 비율")
+
+    # 비율 계산 (전체 주문 기준)
+    total_orders = order_counts.sum()  # 전체 주문 수
+    order_percentages = (order_counts / total_orders) * 100  # 각 범주에 대한 비율(%)
+
+    # 시각화 (전체 주문 기준, 비율 표시)
+    plt.figure(figsize=(10, 6))
+    bars = plt.bar(order_counts.index, order_percentages.values, color='skyblue', width=8000)
+
+    # 각 막대 위에 비율 표시
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.2f}%", ha='center', va='bottom')
+
+    # 가로축 라벨 설정 (전체 주문 기준)
+    plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
+    plt.xlabel('Order Amount Range')
+    plt.ylabel('Percentage (%)')
+    plt.title('Order Distribution by Percentage (All Order)')
+
+    # Streamlit에 전체 주문 기준 비율 그래프 표시
+    st.pyplot(plt)
+
+
+    ### 3. 업셀 주문 기준 시각화 ###
     st.write("### 업셀 주문 기준 객단가 분포")
 
     # 업셀 주문 필터링
@@ -97,6 +124,33 @@ if uploaded_file is not None:
 
         # Streamlit에 업셀 주문 기준 그래프 표시
         st.pyplot(plt)
+
+
+    ### 4. 업셀 주문 기준 객단가 분포 비율 ###
+    st.write("### 업셀 주문 기준 객단가 분포 비율")
+
+    # 비율 계산 (업셀 주문 기준)
+    total_upsell_orders = upsell_order_counts.sum()  # 전체 업셀 주문 수
+    upsell_order_percentages = (upsell_order_counts / total_upsell_orders) * 100  # 비율 계산
+
+    # 시각화 (업셀 주문 기준, 비율 표시)
+    plt.figure(figsize=(10, 6))
+    bars = plt.bar(upsell_order_counts.index, upsell_order_percentages.values, color='orange', width=8000)
+
+    # 각 막대 위에 비율 표시
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.2f}%", ha='center', va='bottom')
+
+    # 가로축 라벨 설정 (업셀 주문 기준)
+    plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
+    plt.xlabel('Order Amount Range')
+    plt.ylabel('Percentage (%)')
+    plt.title('Order Distribution by Percentage (Upsell Order)')
+
+    # Streamlit에 업셀 주문 기준 비율 그래프 표시
+    st.pyplot(plt)
+
 
 else:
     st.write("주문목록 내 '내보내기'버튼을 통해 내려받은 CSV 파일만 사용 가능합니다.")
