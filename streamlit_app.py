@@ -70,7 +70,7 @@ if uploaded_file is not None:
     # 각 막대 위에 비율 표시
     for bar in bars:
         yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.2f}%", ha='center', va='bottom')
+        plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.1f}%", ha='center', va='bottom')
 
     # 가로축 라벨 설정 (전체 주문 기준)
     plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
@@ -140,7 +140,7 @@ if uploaded_file is not None:
     # 각 막대 위에 비율 표시
     for bar in bars:
         yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.2f}%", ha='center', va='bottom')
+        plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.1f}%", ha='center', va='bottom')
 
     # 가로축 라벨 설정 (업셀 주문 기준)
     plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
