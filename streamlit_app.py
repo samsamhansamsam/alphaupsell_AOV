@@ -63,6 +63,9 @@ if uploaded_file is not None:
     total_orders = order_counts.sum()  # 전체 주문 수
     order_percentages = (order_counts / total_orders) * 100  # 각 범주에 대한 비율(%)
 
+    # 데이터 유효성 검사 (전체 주문 기준)
+    st.write("Order Percentages (전체 주문):", order_percentages)
+
     # 시각화 (전체 주문 기준, 비율 표시)
     plt.figure(figsize=(10, 6))
     bars = plt.bar(order_counts.index, order_percentages.values, color='skyblue', width=8000)
@@ -132,6 +135,9 @@ if uploaded_file is not None:
     # 비율 계산 (업셀 주문 기준)
     total_upsell_orders = upsell_order_counts.sum()  # 전체 업셀 주문 수
     upsell_order_percentages = (upsell_order_counts / total_upsell_orders) * 100  # 비율 계산
+
+    # 데이터 유효성 검사 (업셀 주문 기준)
+    st.write("Upsell Order Percentages (업셀 주문):", upsell_order_percentages)
 
     # 시각화 (업셀 주문 기준, 비율 표시)
     plt.figure(figsize=(10, 6))
