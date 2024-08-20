@@ -33,10 +33,6 @@ if uploaded_file is not None:
     full_range = pd.Series([i * 10000 for i in range(21)])  # 0, 10000, ..., 200000
     order_counts = data['금액 범주'].value_counts().reindex(full_range, fill_value=0).sort_index()
 
-
-    # 범주별 주문 수 계산 (전체 주문 기준)
-    order_counts = data['금액 범주'].value_counts().sort_index()
-
     # 데이터 유효성 검사 (전체 주문 기준)
     st.write("Order Counts (전체 주문):", order_counts)
 
@@ -50,11 +46,11 @@ if uploaded_file is not None:
         plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
 
     # 가로축 라벨 설정
-    xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in full_range]
+    xticks_labels = [f"{i // 10000}만원" if i < 200000 else "20만원 이상" for i in full_range]
     plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Order Count')
-    plt.title('Order Distribution by Amount (All Order)')
+    plt.title('Order Distribution by Amount (전체 주문)')
 
     # Streamlit에 전체 주문 기준 그래프 표시
     st.pyplot(plt)
@@ -80,10 +76,10 @@ if uploaded_file is not None:
         plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.1f}%", ha='center', va='bottom')
 
     # 가로축 라벨 설정 (전체 주문 기준)
-    plt.xticks(ticks=order_counts.index, labels=xticks_labels, rotation=45)
+    plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Percentage (%)')
-    plt.title('Order Distribution by Percentage (All Order)')
+    plt.title('Order Distribution by Percentage (전체 주문)')
 
     # Streamlit에 전체 주문 기준 비율 그래프 표시
     st.pyplot(plt)
@@ -105,8 +101,7 @@ if uploaded_file is not None:
         # 20만원 이상의 값은 200,000으로 변환
         upsell_data['금액 범주'] = upsell_data['금액 범주'].apply(lambda x: 200000 if x > 200000 else x)
 
-        # 모든 범주를 설정 (빈 범주도 포함) - 200,000은 한 번만 포함
-        full_range = pd.Series([i * 10000 for i in range(21)])  # 0, 10000, ..., 200000
+        # 모든 범주를 설정 (빈 범주도 포함)
         upsell_order_counts = upsell_data['금액 범주'].value_counts().reindex(full_range, fill_value=0).sort_index()
 
         # 데이터 유효성 검사 (업셀 주문 기준)
@@ -121,10 +116,8 @@ if uploaded_file is not None:
             yval = bar.get_height()
             plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
 
-        # 가로축 라벨 설정 (업셀 주문 기준)
-        num_ticks = len(upsell_order_counts.index)
-        xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in range(num_ticks)]
-        plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
+        # 가로축 라벨 설정
+        plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
         plt.xlabel('Order Amount Range')
         plt.ylabel('Order Count')
         plt.title('Order Distribution by Amount (Upsell Order)')
@@ -153,14 +146,13 @@ if uploaded_file is not None:
         plt.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.1f}%", ha='center', va='bottom')
 
     # 가로축 라벨 설정 (업셀 주문 기준)
-    plt.xticks(ticks=upsell_order_counts.index, labels=xticks_labels, rotation=45)
+    plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Percentage (%)')
     plt.title('Order Distribution by Percentage (Upsell Order)')
 
     # Streamlit에 업셀 주문 기준 비율 그래프 표시
     st.pyplot(plt)
-
 
 else:
     st.write("주문목록 내 '내보내기'버튼을 통해 내려받은 CSV 파일만 사용 가능합니다.")
