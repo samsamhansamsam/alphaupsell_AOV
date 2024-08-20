@@ -50,7 +50,7 @@ if uploaded_file is not None:
     plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Order Count')
-    plt.title('Order Distribution by Amount (전체 주문)')
+    plt.title('Order Distribution by Amount (All Order)')
 
     # Streamlit에 전체 주문 기준 그래프 표시
     st.pyplot(plt)
@@ -79,7 +79,7 @@ if uploaded_file is not None:
     plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Percentage (%)')
-    plt.title('Order Distribution by Percentage (전체 주문)')
+    plt.title('Order Distribution by Percentage (All Order)')
 
     # Streamlit에 전체 주문 기준 비율 그래프 표시
     st.pyplot(plt)
