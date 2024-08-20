@@ -50,13 +50,12 @@ if uploaded_file is not None:
         plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
 
     # 가로축 라벨 설정
-    num_ticks = len(order_counts.index)
-    xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in range(full_range)]
+    xticks_labels = [f">{i / 1.0:.1f}" if i > 0 else "<1.0" for i in full_range]
     plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Order Count')
     plt.title('Order Distribution by Amount (All Order)')
-    
+
     # Streamlit에 전체 주문 기준 그래프 표시
     st.pyplot(plt)
 
