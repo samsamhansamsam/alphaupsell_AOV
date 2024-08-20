@@ -46,7 +46,7 @@ if uploaded_file is not None:
         plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
 
     # 가로축 라벨 설정
-    xticks_labels = [f"{i // 10000}만원" if i < 200000 else "20만원 이상" for i in full_range]
+    xticks_labels = [f">{i // 10000}.0" if i < 200000 else ">20.0" for i in full_range]
     plt.xticks(ticks=full_range, labels=xticks_labels, rotation=45)
     plt.xlabel('Order Amount Range')
     plt.ylabel('Order Count')
