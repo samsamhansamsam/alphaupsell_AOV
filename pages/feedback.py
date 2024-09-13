@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 제목 설정
-st.title('알파업셀 객단가 시각화 도구 v1.1')
+st.title('알파업셀 객단가 시각화 도구 v1.2')
 
 # 파일 업로더 생성
 uploaded_file = st.file_uploader("CSV 파일을 달라.", type="csv")
@@ -19,7 +19,6 @@ if uploaded_file is not None:
     # 중복 제거: 중복된 '주문번호'가 있을 때 '업셀'을 우선적으로 보존
     data = data.sort_values(by=['일반/업셀 구분'], ascending=False)  # '일반'을 먼저 정렬하여 '업셀'을 남김
     data = data.drop_duplicates(subset=['주문번호'], keep='last')  # '업셀' 우선 보존
-
 
 
     ### 회원과 비회원의 주문 비중 비교 ###
@@ -49,32 +48,6 @@ if uploaded_file is not None:
     ax1.set_title('회원과 비회원의 주문 비중 (파이 차트)')
 
     st.pyplot(fig1)
-
-    # 바 차트 시각화 (주문 건수)
-    fig2, ax2 = plt.subplots()
-    bars = ax2.bar(member_counts.index, member_counts.values, color=['skyblue', 'orange'])
-    for bar in bars:
-        yval = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
-    ax2.set_xlabel('회원 여부')
-    ax2.set_ylabel('주문 건수')
-    ax2.set_title('회원과 비회원의 주문 건수 비교 (바 차트)')
-
-    st.pyplot(fig2)
-
-    # 바 차트 시각화 (비율)
-    fig3, ax3 = plt.subplots()
-    bars = ax3.bar(member_percentages.index, member_percentages.values, color=['skyblue', 'orange'])
-    for bar in bars:
-        yval = bar.get_height()
-        ax3.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.1f}%", ha='center', va='bottom')
-    ax3.set_xlabel('회원 여부')
-    ax3.set_ylabel('비율 (%)')
-    ax3.set_title('회원과 비회원의 주문 비율 비교')
-
-    st.pyplot(fig3)
-
-
 
 
     ### 1. 전체 주문 기준 시각화 ###
