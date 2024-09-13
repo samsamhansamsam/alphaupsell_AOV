@@ -20,6 +20,63 @@ if uploaded_file is not None:
     data = data.sort_values(by=['일반/업셀 구분'], ascending=False)  # '일반'을 먼저 정렬하여 '업셀'을 남김
     data = data.drop_duplicates(subset=['주문번호'], keep='last')  # '업셀' 우선 보존
 
+
+
+    ### 회원과 비회원의 주문 비중 비교 ###
+    st.write("### 회원과 비회원의 주문 비중 비교")
+
+    # '회원여부' 컬럼 생성
+    data['회원여부'] = data['주문자 아이디'].apply(lambda x: '비회원' if pd.isna(x) or str(x).strip() == '' else '회원')
+
+    # 주문 건수 계산
+    member_counts = data['회원여부'].value_counts()
+
+    # 비율 계산
+    total_orders_member = member_counts.sum()
+    member_percentages = (member_counts / total_orders_member) * 100
+
+    # 주문 건수 및 비율 출력
+    st.write("회원과 비회원의 주문 건수:")
+    st.write(member_counts)
+
+    st.write("회원과 비회원의 주문 비율 (%):")
+    st.write(member_percentages)
+
+    # 파이 차트 시각화
+    fig1, ax1 = plt.subplots()
+    ax1.pie(member_counts.values, labels=member_counts.index, autopct='%1.1f%%', startangle=90)
+    ax1.axis('equal')
+    ax1.set_title('회원과 비회원의 주문 비중 (파이 차트)')
+
+    st.pyplot(fig1)
+
+    # 바 차트 시각화 (주문 건수)
+    fig2, ax2 = plt.subplots()
+    bars = ax2.bar(member_counts.index, member_counts.values, color=['skyblue', 'orange'])
+    for bar in bars:
+        yval = bar.get_height()
+        ax2.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
+    ax2.set_xlabel('회원 여부')
+    ax2.set_ylabel('주문 건수')
+    ax2.set_title('회원과 비회원의 주문 건수 비교 (바 차트)')
+
+    st.pyplot(fig2)
+
+    # 바 차트 시각화 (비율)
+    fig3, ax3 = plt.subplots()
+    bars = ax3.bar(member_percentages.index, member_percentages.values, color=['skyblue', 'orange'])
+    for bar in bars:
+        yval = bar.get_height()
+        ax3.text(bar.get_x() + bar.get_width()/2, yval, f"{yval:.1f}%", ha='center', va='bottom')
+    ax3.set_xlabel('회원 여부')
+    ax3.set_ylabel('비율 (%)')
+    ax3.set_title('회원과 비회원의 주문 비율 비교')
+
+    st.pyplot(fig3)
+
+
+
+
     ### 1. 전체 주문 기준 시각화 ###
     st.write("### 전체 주문 기준 객단가 분포")
 
